@@ -1,0 +1,42 @@
+//
+//  PrefixHeader.pch
+//  TimeCode
+//
+//  Created by 星歌 on 2019/4/13.
+//  Copyright © 2019 星歌. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+
+#pragma mark - 常用头文件
+#import "TCNetworkService+UIViewController.h"
+#import "MBProgressHUD+TCHUD.h"
+
+#pragma mark - 第三方头文件
+#import "YYCategories.h"
+#import "Masonry.h"
+#import "MJExtension.h"
+#import "MJRefresh.h"
+#import "UIImageView+WebCache.h"
+
+
+#pragma mark - 常用宏
+//屏幕长度宽度
+#define UI_SCREEN_HEIGHT  MAX([UIScreen mainScreen].bounds.size.width , [UIScreen mainScreen].bounds.size.height)
+#define UI_SCREEN_WIDTH   MIN([UIScreen mainScreen].bounds.size.width , [UIScreen mainScreen].bounds.size.height)
+
+//导航栏高度
+#define UI_NAVIGATIONBAR_HEIGHT     44.f
+// 设备型号
+#define UI_IS_IPHONE      [[UIDevice currentDevice].model isEqualToString:@"iPhone"]
+// 是否是异形屏
+#define UI_IS_IPHONE_X    (UI_IS_IPHONE && ((UI_SCREEN_WIDTH/UI_SCREEN_HEIGHT) < 0.5))
+
+//状态栏高度
+#define UI_STATUSBAR_HEIGHT         (UI_IS_IPHONE_X ? 44.f : 20.f)
+
+
+
+#endif /* PrefixHeader_pch */
