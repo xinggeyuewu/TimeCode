@@ -12,8 +12,7 @@
 
 
 @interface TCPhotoCuratedListCell ()
-/// 图片
-@property (nonatomic, strong) UIImageView *photoView;
+
 
 @end
 
@@ -44,9 +43,9 @@
 }
 
 - (void)setModel:(TCPhotoModel *)model {
+    _model = model;
     [self.photoView sd_setImageWithURL:[NSURL URLWithString:model.urls.thumb] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         
-//        NSLog(@"下载成功---");
     }];
 }
 

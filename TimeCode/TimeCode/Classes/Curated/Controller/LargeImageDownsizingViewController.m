@@ -50,6 +50,9 @@
 #import "ImageScrollView.h"
 #import "TCPhotoModel.h"
 #import "TCPhotoUrlModel.h"
+#import <AFNetworking/AFNetworking.h>
+#import <AFNetworking/AFImageDownloader.h>
+
 
 /* Image Constants: for images, we define the resulting image
  size and tile size in megabytes. This translates to an amount
@@ -93,6 +96,7 @@
  NSString* _platform = [NSString stringWithCString:machine encoding:NSASCIIStringEncoding];
  free(machine);
  
+ 
  These constants are suggested initial values for iPad1, and iPhone 3GS */
 #define IPAD1_IPHONE3GS
 #ifdef IPAD1_IPHONE3GS
@@ -100,6 +104,8 @@
 #   define kSourceImageTileSizeMB 20.0f // The tile size will be (x)MB of uncompressed image data.
 #endif
 
+#   define kDestImageSizeMB 60.0f // The resulting image will be (x)MB of uncompressed image data.
+#   define kSourceImageTileSizeMB 20.0f // The tile size will be (x)MB of uncompressed image data.
 /* These constants are suggested initial values for iPad2, and iPhone 4 */
 //#define IPAD2_IPHONE4
 #ifdef IPAD2_IPHONE4
@@ -121,9 +127,14 @@
 #define bytesPerMB 1048576.0f
 #define bytesPerPixel 4.0f
 #define pixelsPerMB ( bytesPerMB / bytesPerPixel ) // 262144 pixels, for 4 bytes per pixel.
-#define destTotalPixels kDestImageSizeMB * pixelsPerMB
+#define destTotalPixels 20 * pixelsPerMB
 #define tileTotalPixels kSourceImageTileSizeMB * pixelsPerMB
 #define destSeemOverlap 2.0f // the numbers of pixels to overlap the seems where tiles meet.
+
+@interface LargeImageDownsizingViewController ()<ImageScrollViewDelegate>
+/// 文件路径
+@property (nonatomic, strong) NSURL *filePath;
+@end
 
 @implementation LargeImageDownsizingViewController
 
@@ -154,10 +165,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     //--
-//    progressView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-//    [self.view addSubview:progressView];
-////    [progressView release];
-//    [NSThread detachNewThreadSelector:@selector(downsize:) toTarget:self withObject:nil];
+
+    [self prepareUI];
+    [self downloadImageWithSDWeb];
 }
 
 //- (void)viewDidUnload {
@@ -171,45 +181,35 @@
 //    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 //}
 
-- (void)setModel:(TCPhotoModel *)model {
-    _model = model;
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [self.view addSubview:imageView];
-    [imageView sd_setImageWithURL:[NSURL URLWithString:model.urls.small]];
+
+- (void)prepareUI {
+    progressView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    [self.view addSubview:progressView];
+//    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    progressView.contentMode = UIViewContentModeScaleAspectFit;
+//    [self.view addSubview:imageView];
+    if (self.thumbImage) {
+        progressView.image = self.thumbImage;
+    }else {
+        [progressView sd_setImageWithURL:[NSURL URLWithString:self.model.urls.small]];}
+    progressView.userInteractionEnabled = YES;
+    [progressView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(ImageScrollViewNeedCloseVCWithView:)]];
     
     [MBProgressHUD showActivityIndicatorTo:self.view];
-    
-    [[SDImageCache sharedImageCache].config setShouldDecompressImages:NO];
-    UIImage *image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:[[SDWebImageManager sharedManager] cacheKeyForURL:[NSURL URLWithString:model.urls.raw]]];
-    if (image) {
-        [imageView removeFromSuperview];
-        [self showImage:image];
-    }else {
-    
-    [[SDWebImageDownloader sharedDownloader] setShouldDecompressImages:NO];
-    
-        [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:model.urls.raw] options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
-            
-            [[SDImageCache sharedImageCache] storeImageDataToDisk:data forKey:[[SDWebImageManager sharedManager] cacheKeyForURL:[NSURL URLWithString:model.urls.raw]]];
-            TCdispatch_main_async_safe(^{
-                [imageView removeFromSuperview];
-                [self showImage:image];
-                
-            });
-            
-        }];
-        
-    }
+}
+- (void)setModel:(TCPhotoModel *)model {
+    _model = model;
 }
 
 /// 开始展示图片
 - (void)showImage:(UIImage *)image {
+    if (progressView) {
+        [progressView removeFromSuperview];
+    }
     [MBProgressHUD hiddenActivityIndicatorFor:self.view];
     progressView = [[UIImageView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:progressView];
     //    [progressView release];
-    sourceImage = image;
     [NSThread detachNewThreadSelector:@selector(downsize:) toTarget:self withObject:nil];
 }
 
@@ -220,7 +220,7 @@
         // create an image from the image filename constant. Note this
         // doesn't actually read any pixel information from disk, as that
         // is actually done at draw time.
-//        sourceImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:kImageFilename ofType:nil]];
+        sourceImage = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:[[SDWebImageManager sharedManager] cacheKeyForURL:[NSURL URLWithString:_model.urls.raw]]];
         if( sourceImage == nil ) NSLog(@"input image not found!");
         // get the width and height of the input image using
         // core graphics image helper functions.
@@ -335,7 +335,6 @@
             // we reallocate the source image after the pool is drained since UIImage -imageNamed
             // returns us an autoreleased object.
             if( y < iterations - 1 ) {
-//                sourceImage = [[UIImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:kImageFilename ofType:nil]];
                 sourceImage = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:[[SDWebImageManager sharedManager] cacheKeyForURL:[NSURL URLWithString:_model.urls.raw]]];
                 [self performSelectorOnMainThread:@selector(updateScrollView:) withObject:nil waitUntilDone:YES];
             }
@@ -352,7 +351,10 @@
 -(void)createImageFromContext {
     // create a CGImage from the offscreen image context
     CGImageRef destImageRef = CGBitmapContextCreateImage( destContext );
-    if( destImageRef == NULL ) NSLog(@"destImageRef is null.");
+    if( destImageRef == NULL ) {
+        NSLog(@"destImageRef is null.");
+        return;
+    };
     // wrap a UIImage around the CGImage
     self.destImage = [UIImage imageWithCGImage:destImageRef scale:1.0f orientation:UIImageOrientationDownMirrored];
     // release ownership of the CGImage, since destImage retains ownership of the object now.
@@ -372,6 +374,46 @@
     // create a scroll view to display the resulting image.
     scrollView = [[ImageScrollView alloc] initWithFrame:self.view.bounds image:self.destImage];
     [self.view addSubview:scrollView];
+    scrollView.closeDelegate = self;
 }
+#pragma mark - 私有方法
+- (void)downloadImageWithAFN {
+    
+}
+
+/// 使用SDWebImage下载图片
+- (void)downloadImageWithSDWeb {
+        [[SDImageCache sharedImageCache].config setShouldDecompressImages:NO];
+        UIImage *image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:[[SDWebImageManager sharedManager] cacheKeyForURL:[NSURL URLWithString:self.model.urls.raw]]];
+        if (image) {
+            [self showImage:image];
+        }else {
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                [[SDWebImageDownloader sharedDownloader] setShouldDecompressImages:NO];
+                [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:self.model.urls.raw] options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+                    if (finished) {
+                        [[SDImageCache sharedImageCache] storeImageDataToDisk:data forKey:[[SDWebImageManager sharedManager] cacheKeyForURL:[NSURL URLWithString:self.model.urls.raw]]];
+                        TCdispatch_main_async_safe(^{
+                            [self showImage:image];
+                        });
+                    }
+                }];
+            });
+        }
+}
+
+
+#pragma mark - 图片界面代理
+- (void)ImageScrollViewNeedCloseVCWithView:(ImageScrollView *)view {
+    [self dismissViewControllerAnimated:NO completion:^{
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            
+                [[SDImageCache sharedImageCache] removeImageForKey:[[SDWebImageManager sharedManager] cacheKeyForURL:[NSURL URLWithString:self.model.urls.raw]] fromDisk:NO withCompletion:nil];
+        });
+
+    }];
+}
+
+
 
 @end

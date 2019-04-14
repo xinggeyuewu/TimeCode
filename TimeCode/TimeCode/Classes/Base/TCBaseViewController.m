@@ -67,6 +67,7 @@
         _tc_tableView.delegate = self;
         _tc_tableView.tableFooterView = [[UIView alloc] init];
         _tc_tableView.showsVerticalScrollIndicator = NO;
+        _tc_tableView.delaysContentTouches = NO;
         if (@available(iOS 11.0, *)) {
             _tc_tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
             _tc_tableView.estimatedSectionHeaderHeight = 0;

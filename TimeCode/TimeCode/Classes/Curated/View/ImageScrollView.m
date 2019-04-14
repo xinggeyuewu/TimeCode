@@ -49,6 +49,16 @@
 #import "TiledImageView.h"
 #import <QuartzCore/QuartzCore.h>
 
+#define kMaxZoomScale 5.f
+#define kMinZoomScale 1.f
+
+@interface ImageScrollView ()
+
+/// 当前缩放值
+@property (nonatomic, assign) CGFloat currentScale;
+
+@end
+
 @implementation ImageScrollView;
 
 @synthesize image, backTiledView;
@@ -69,14 +79,16 @@
         self.bouncesZoom = YES;
         self.decelerationRate = UIScrollViewDecelerationRateFast;
         self.delegate = self;
-        self.maximumZoomScale = 5.0f;
-        self.minimumZoomScale = 0.25f;
+        self.currentScale = 1.f;
+        self.maximumZoomScale = kMaxZoomScale;
+        self.minimumZoomScale = 0.25;
         self.backgroundColor = [UIColor colorWithRed:0.4f green:0.2f blue:0.2f alpha:1.0f];
         // determine the size of the image
         self.image = img;
         CGRect imageRect = CGRectMake(0.0f,0.0f,CGImageGetWidth(image.CGImage),CGImageGetHeight(image.CGImage));
         imageScale = self.frame.size.width/imageRect.size.width;
-        minimumScale = imageScale * 0.75f;
+//        minimumScale = imageScale * 0.75f;
+        minimumScale = imageScale;
         NSLog(@"imageScale: %f",imageScale);
         imageRect.size = CGSizeMake(imageRect.size.width*imageScale, imageRect.size.height*imageScale);
         // Create a low res image representation of the image to display before the TiledImageView
@@ -96,10 +108,21 @@
         // Create the TiledImageView based on the size of the image and scale it to fit the view.
         frontTiledView = [[TiledImageView alloc] initWithFrame:imageRect image:image scale:imageScale];
         [self addSubview:frontTiledView];
+        
+        UITapGestureRecognizer *singleClick = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleClick:)];
+        [self addGestureRecognizer:singleClick];
+        
+        UITapGestureRecognizer *doubleClick = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleClick:)];
+        doubleClick.numberOfTapsRequired = 2;
+        [self addGestureRecognizer:doubleClick];
+        
+        [singleClick requireGestureRecognizerToFail:doubleClick];
 //        [frontTiledView release];
     }
     return self;
 }
+
+
 
 #pragma mark -
 #pragma mark Override layoutSubviews to center content
@@ -137,6 +160,7 @@
 // A UIScrollView delegate callback, called when the user stops zooming.  When the user stops zooming
 // we create a new TiledImageView based on the new zoom level and draw it on top of the old TiledImageView.
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
+//    self.currentScale = scale;
     // set the new scale factor for the TiledImageView
     imageScale *=scale;
     if( imageScale < minimumScale ) imageScale = minimumScale;
@@ -155,8 +179,20 @@
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
     // Remove back tiled view.
     [backTiledView removeFromSuperview];
-    // Set the current TiledImageView to be the old view.
+//    // Set the current TiledImageView to be the old view.
     self.backTiledView = frontTiledView;
+}
+
+
+#pragma mark - 手势交互
+- (void)singleClick:(UITapGestureRecognizer *)gestureRecognizer {
+    if ([self.closeDelegate respondsToSelector:@selector(ImageScrollViewNeedCloseVCWithView:)]) {
+        [self.closeDelegate ImageScrollViewNeedCloseVCWithView:self];
+    }
+}
+
+- (void)doubleClick:(UITapGestureRecognizer *)gestureRecognizer {
+
 }
 
 @end

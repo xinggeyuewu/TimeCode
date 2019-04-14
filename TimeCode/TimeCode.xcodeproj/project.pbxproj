@@ -167,10 +167,10 @@
 			children = (
 				D767A8E022622669006255B4 /* TCJSONResponseSerializer.h */,
 				D767A8DF22622669006255B4 /* TCJSONResponseSerializer.m */,
-				D767A8D522620395006255B4 /* TCNetworkService.h */,
-				D767A8D622620395006255B4 /* TCNetworkService.m */,
 				D767A8D822621D4E006255B4 /* TCNetworkCache.h */,
 				D767A8D922621D4E006255B4 /* TCNetworkCache.m */,
+				D767A8D522620395006255B4 /* TCNetworkService.h */,
+				D767A8D622620395006255B4 /* TCNetworkService.m */,
 				D7FDF6CA2262554B00916088 /* TCNetworkService+UIViewController.h */,
 				D7FDF6CB2262554B00916088 /* TCNetworkService+UIViewController.m */,
 			);
@@ -503,7 +503,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7Y5QEMFA95;
+				DEVELOPMENT_TEAM = ZACA87B3NE;
 				GCC_PREFIX_HEADER = TimeCode/Resource/PrefixHeader.pch;
 				INFOPLIST_FILE = TimeCode/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -523,7 +523,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7Y5QEMFA95;
+				DEVELOPMENT_TEAM = ZACA87B3NE;
 				GCC_PREFIX_HEADER = TimeCode/Resource/PrefixHeader.pch;
 				INFOPLIST_FILE = TimeCode/Resource/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;

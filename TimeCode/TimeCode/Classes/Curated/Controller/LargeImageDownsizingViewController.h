@@ -92,5 +92,7 @@
 
 /// 图片url
 @property (nonatomic, strong)TCPhotoModel * model;
+/// 缩略图
+@property (nonatomic, strong)UIImage *thumbImage;
 
 @end

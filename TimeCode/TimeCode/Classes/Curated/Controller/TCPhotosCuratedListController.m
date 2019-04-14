@@ -117,9 +117,17 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row < self.dataArr.count) {
-        LargeImageDownsizingViewController *vc = [[LargeImageDownsizingViewController alloc] init];
-        vc.model = self.dataArr[indexPath.row];
-        [self presentViewController:vc animated:NO completion:nil];
+        TCdispatch_main_async_safe(^{
+            LargeImageDownsizingViewController *vc = [[LargeImageDownsizingViewController alloc] init];
+            TCPhotoCuratedListCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            if (cell) {
+                vc.thumbImage = cell.photoView.image;
+            }
+            vc.model = self.dataArr[indexPath.row];
+            
+            [self presentViewController:vc animated:NO completion:nil];
+        });
+        
     }
 }
 

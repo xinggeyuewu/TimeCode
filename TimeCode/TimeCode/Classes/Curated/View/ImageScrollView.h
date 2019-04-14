@@ -47,7 +47,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class TiledImageView;
+@class TiledImageView,ImageScrollView;
+
+@protocol ImageScrollViewDelegate <NSObject>
+
+- (void)ImageScrollViewNeedCloseVCWithView:(ImageScrollView *)view;
+
+@end
 
 @interface ImageScrollView : UIScrollView <UIScrollViewDelegate> {
     // The TiledImageView that is currently front most
@@ -64,6 +70,12 @@
 }
 @property (retain) UIImage* image;
 @property (retain) TiledImageView* backTiledView;
+
+
+
+
+/// 关闭视图手势代理
+@property (nonatomic, weak) id<ImageScrollViewDelegate>closeDelegate;
 
 -(id)initWithFrame:(CGRect)frame image:(UIImage*)image;
 

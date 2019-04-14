@@ -50,6 +50,7 @@
         [MBProgressHUD hideHUDForView:view animated:NO];
         MBProgressHUD *progressHUD = [[self alloc] initWithView:view];
         progressHUD.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
+        progressHUD.userInteractionEnabled = NO;
         progressHUD.bezelView.backgroundColor = [UIColor colorWithRed:0.f green:0.f blue:0.f alpha:0.8];
         progressHUD.bezelView.layer.cornerRadius = 8.f;
         progressHUD.bezelView.layer.masksToBounds = YES;
