@@ -92,4 +92,8 @@
     CGContextRestoreGState(context);
 }
 
+- (void)dealloc {
+    NSLog(@"页面销毁：%s",__func__);
+}
+
 @end

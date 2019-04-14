@@ -98,27 +98,15 @@
  
  
  These constants are suggested initial values for iPad1, and iPhone 3GS */
-#define IPAD1_IPHONE3GS
-#ifdef IPAD1_IPHONE3GS
-#   define kDestImageSizeMB 60.0f // The resulting image will be (x)MB of uncompressed image data.
-#   define kSourceImageTileSizeMB 20.0f // The tile size will be (x)MB of uncompressed image data.
-#endif
 
-#   define kDestImageSizeMB 60.0f // The resulting image will be (x)MB of uncompressed image data.
+#   define kDestImageSizeMB 50.0f // The resulting image will be (x)MB of uncompressed image data.
 #   define kSourceImageTileSizeMB 20.0f // The tile size will be (x)MB of uncompressed image data.
 /* These constants are suggested initial values for iPad2, and iPhone 4 */
-//#define IPAD2_IPHONE4
-#ifdef IPAD2_IPHONE4
-#   define kDestImageSizeMB 120.0f // The resulting image will be (x)MB of uncompressed image data.
-#   define kSourceImageTileSizeMB 40.0f // The tile size will be (x)MB of uncompressed image data.
-#endif
+
 
 /* These constants are suggested initial values for iPhone3G, iPod2 and earlier devices */
 //#define IPHONE3G_IPOD2_AND_EARLIER
-#ifdef IPHONE3G_IPOD2_AND_EARLIER
-#   define kDestImageSizeMB 30.0f // The resulting image will be (x)MB of uncompressed image data.
-#   define kSourceImageTileSizeMB 10.0f // The tile size will be (x)MB of uncompressed image data.
-#endif
+
 
 /* Constants for all other iOS devices are left to be defined by the developer.
  The purpose of this sample is to illustrate that device specific constants can
@@ -127,7 +115,7 @@
 #define bytesPerMB 1048576.0f
 #define bytesPerPixel 4.0f
 #define pixelsPerMB ( bytesPerMB / bytesPerPixel ) // 262144 pixels, for 4 bytes per pixel.
-#define destTotalPixels 20 * pixelsPerMB
+#define destTotalPixels 50 * pixelsPerMB
 #define tileTotalPixels kSourceImageTileSizeMB * pixelsPerMB
 #define destSeemOverlap 2.0f // the numbers of pixels to overlap the seems where tiles meet.
 
@@ -205,10 +193,12 @@
 - (void)showImage:(UIImage *)image {
     if (progressView) {
         [progressView removeFromSuperview];
+        progressView = nil;
     }
     [MBProgressHUD hiddenActivityIndicatorFor:self.view];
     progressView = [[UIImageView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:progressView];
+//    progressView = nil;
     //    [progressView release];
     [NSThread detachNewThreadSelector:@selector(downsize:) toTarget:self withObject:nil];
 }
@@ -327,6 +317,7 @@
                  that data is finally decoded from disk to mem when CGContextDrawImage is called. sourceTileImageRef
                  maintains internally a reference to the original image, and that original image both, houses and
                  caches that portion of decoded mem. Thus the following call to release the source image. */
+                sourceImage = nil;
                 //        [sourceImage release];
                 // free all objects that were sent -autorelease within the scope of this loop.
                 //            [pool2 drain];
@@ -370,9 +361,11 @@
 
 -(void)initializeScrollView:(id)arg {
     [progressView removeFromSuperview];
+    progressView = nil;
     [self createImageFromContext];
     // create a scroll view to display the resulting image.
     scrollView = [[ImageScrollView alloc] initWithFrame:self.view.bounds image:self.destImage];
+    NSLog(@"图片原始尺寸：%@\n,压缩后图片尺寸：%@\n屏幕宽高：%@",NSStringFromCGSize(sourceImage.size),NSStringFromCGSize(self.destImage.size),NSStringFromCGSize([UIScreen mainScreen].bounds.size));
     [self.view addSubview:scrollView];
     scrollView.closeDelegate = self;
 }
@@ -414,6 +407,9 @@
     }];
 }
 
+- (void)dealloc {
+    NSLog(@"页面销毁：%s",__func__);
+}
 
 
 @end

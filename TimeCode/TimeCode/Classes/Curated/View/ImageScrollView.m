@@ -108,7 +108,7 @@
         // Create the TiledImageView based on the size of the image and scale it to fit the view.
         frontTiledView = [[TiledImageView alloc] initWithFrame:imageRect image:image scale:imageScale];
         [self addSubview:frontTiledView];
-        
+//        frontTiledView = nil;
         UITapGestureRecognizer *singleClick = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleClick:)];
         [self addGestureRecognizer:singleClick];
         
@@ -168,6 +168,7 @@
     // Create a new TiledImageView based on new frame and scaling.
     frontTiledView = [[TiledImageView alloc] initWithFrame:imageRect image:image scale:imageScale];
     [self addSubview:frontTiledView];
+//    frontTiledView = nil;
 //    [frontTiledView release];
 }
 
@@ -179,6 +180,7 @@
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view {
     // Remove back tiled view.
     [backTiledView removeFromSuperview];
+    backTiledView = nil;
 //    // Set the current TiledImageView to be the old view.
     self.backTiledView = frontTiledView;
 }
@@ -193,6 +195,12 @@
 
 - (void)doubleClick:(UITapGestureRecognizer *)gestureRecognizer {
 
+}
+
+- (void)dealloc {
+    NSLog(@"页面销毁：%s",__func__);
+    self.backTiledView = nil;
+    frontTiledView = nil;
 }
 
 @end
