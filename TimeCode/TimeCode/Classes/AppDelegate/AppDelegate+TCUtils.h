@@ -13,8 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AppDelegate (TCUtils)
 /// 移除导航条底线
 - (void)tc_removeNavigationBarBottomLine;
-/// 配置网络
-- (void)tc_networkConfiguration;
 @end
 
 NS_ASSUME_NONNULL_END

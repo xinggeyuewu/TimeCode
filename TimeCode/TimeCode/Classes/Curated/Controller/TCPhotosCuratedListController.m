@@ -45,6 +45,19 @@
 }
 
 
+/// 请求新数据
+- (void)tc_loadNewData {
+    self.page = 1;
+    [self tc_getPhotosCuratedListDataNetWork];
+}
+/// 请求更多数据
+- (void)tc_loadMoreData {
+    self.page += 1;
+    [self tc_getPhotosCuratedListDataNetWork];
+    
+}
+
+
 #pragma mark - 网络请求
 - (void)tc_getPhotosCuratedListDataNetWork {
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
@@ -73,18 +86,7 @@
     }];
 }
 
-#pragma mark - 私有方法
-/// 请求新数据
-- (void)tc_loadNewData {
-    self.page = 1;
-    [self tc_getPhotosCuratedListDataNetWork];
-}
-/// 请求更多数据
-- (void)tc_loadMoreData {
-    self.page += 1;
-    [self tc_getPhotosCuratedListDataNetWork];
-    
-}
+
 
 
 

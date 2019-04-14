@@ -11,13 +11,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TCBaseViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
-/**
- * 刷新头
- */
+
+/// 刷新头
 @property (nonatomic, strong) MJRefreshGifHeader *refreshHeader;
-/**
- * 刷新尾
- */
+/// 刷新尾
 @property (nonatomic, strong) MJRefreshAutoFooter *refreshFooter;
 
 /// 表视图(需实现代理方法)
