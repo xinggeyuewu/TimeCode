@@ -46,7 +46,10 @@
 
 /// 添加旋转菊花到指定view，不会自动隐藏
 + (void)showActivityIndicatorTo:(UIView *)view {
-    TCdispatch_main_async_safe((^{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+//    })
+//    TCdispatch_main_async_safe((^{
         [MBProgressHUD hideHUDForView:view animated:NO];
         MBProgressHUD *progressHUD = [[self alloc] initWithView:view];
         progressHUD.bezelView.style = MBProgressHUDBackgroundStyleSolidColor;
@@ -59,7 +62,7 @@
         [UIActivityIndicatorView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]].color = [UIColor whiteColor];
         [view addSubview:progressHUD];
         [progressHUD showAnimated:YES];
-    }));
+    });
     
 }
 

@@ -85,6 +85,8 @@
 -(void)drawRect:(CGRect)rect {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
+//    CGContextTranslateCTM( context, 0.0f, imageRect.size.height );
+    
     // Scale the context so that the image is rendered
     // at the correct size for the zoom level.
     CGContextScaleCTM(context, imageScale,imageScale);

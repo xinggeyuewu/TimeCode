@@ -85,10 +85,9 @@
 // because it is accessed off the main thread.
 @property (retain) UIImage* destImage;
 
--(void)downsize:(id)arg;
--(void)updateScrollView:(id)arg;
--(void)initializeScrollView:(id)arg;
--(void)createImageFromContext;
+
+-(void)initializeScrollView:(UIImage *)arg;
+
 
 /// 图片url
 @property (nonatomic, strong)TCPhotoModel * model;

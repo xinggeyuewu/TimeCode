@@ -49,7 +49,7 @@
 #import "TiledImageView.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define kMaxZoomScale 5.f
+#define kMaxZoomScale 4.f
 #define kMinZoomScale 1.f
 
 @interface ImageScrollView ()
