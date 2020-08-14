@@ -122,6 +122,9 @@
 @interface LargeImageDownsizingViewController ()<ImageScrollViewDelegate>
 /// 文件路径
 @property (nonatomic, strong) NSURL *filePath;
+///  测试
+@property (nonatomic, strong) NSString *testStr;
+
 @end
 
 @implementation LargeImageDownsizingViewController
