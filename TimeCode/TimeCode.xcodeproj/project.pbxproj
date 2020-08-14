@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		30572C2ACEB5458B0900C068 /* libPods-TimeCode.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A03D06FB21EEBA82CD6D009F /* libPods-TimeCode.a */; };
+		D73C9B2624E6457000157F46 /* TCTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D73C9B2524E6457000157F46 /* TCTestViewController.m */; };
 		D767A8CE2261FE4E006255B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D767A8C52261FE4E006255B4 /* Assets.xcassets */; };
 		D767A8CF2261FE4E006255B4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D767A8C62261FE4E006255B4 /* LaunchScreen.storyboard */; };
 		D767A8D12261FE4E006255B4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D767A8CA2261FE4E006255B4 /* main.m */; };
@@ -33,6 +34,8 @@
 		49BCCCDC255645B854431B33 /* Pods-TimeCode.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TimeCode.release.xcconfig"; path = "Pods/Target Support Files/Pods-TimeCode/Pods-TimeCode.release.xcconfig"; sourceTree = "<group>"; };
 		4BF5BDB53096A5062A0668CC /* Pods-TimeCode.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TimeCode.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TimeCode/Pods-TimeCode.debug.xcconfig"; sourceTree = "<group>"; };
 		A03D06FB21EEBA82CD6D009F /* libPods-TimeCode.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TimeCode.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D73C9B2424E6457000157F46 /* TCTestViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TCTestViewController.h; sourceTree = "<group>"; };
+		D73C9B2524E6457000157F46 /* TCTestViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TCTestViewController.m; sourceTree = "<group>"; };
 		D767A8A62261FBA1006255B4 /* TimeCode.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TimeCode.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D767A8C42261FE4E006255B4 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		D767A8C52261FE4E006255B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -194,6 +197,8 @@
 				D767A8EE22622F96006255B4 /* TCPhotosCuratedListController.m */,
 				D7FDF6D02262680500916088 /* LargeImageDownsizingViewController.h */,
 				D7FDF6D12262680500916088 /* LargeImageDownsizingViewController.m */,
+				D73C9B2424E6457000157F46 /* TCTestViewController.h */,
+				D73C9B2524E6457000157F46 /* TCTestViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -359,6 +364,7 @@
 				D7FDF6C022623DFC00916088 /* MBProgressHUD+TCHUD.m in Sources */,
 				D767A8E122622669006255B4 /* TCJSONResponseSerializer.m in Sources */,
 				D7FDF6C62262481200916088 /* TCPhotoCuratedListCell.m in Sources */,
+				D73C9B2624E6457000157F46 /* TCTestViewController.m in Sources */,
 				D7FDF6C32262429700916088 /* TCPhotoModel.m in Sources */,
 				D7FDF6CF2262678800916088 /* ImageScrollView.m in Sources */,
 				D767A8EC22622F0D006255B4 /* AppDelegate+TCUtils.m in Sources */,

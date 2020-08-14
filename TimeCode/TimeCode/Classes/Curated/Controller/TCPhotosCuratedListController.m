@@ -16,6 +16,8 @@
 @property (nonatomic, strong) NSMutableArray *dataArr;
 /// 第几页
 @property (nonatomic, assign) NSInteger page;
+///  测试
+@property (nonatomic, strong) NSString *testStr;
 @end
 
 @implementation TCPhotosCuratedListController
