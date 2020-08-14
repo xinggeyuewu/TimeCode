@@ -18,6 +18,8 @@
 @property (nonatomic, assign) NSInteger page;
 ///  测试
 @property (nonatomic, strong) NSString *testStr;
+/// 制造冲突
+@property (nonatomic, strong) NSString *nameStr;
 @end
 
 @implementation TCPhotosCuratedListController
